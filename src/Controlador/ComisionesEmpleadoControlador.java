@@ -4,9 +4,8 @@
  * and open the template in the editor.
  */
 package Controlador;
-import Modelo.EmpleadoModelo;
-import Modelo.NotaModelo;
-import Modelo.ProductoModelo;
+
+import Modelo.*;
 import Vista.ComisionesEmpleadoVista;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,8 +18,14 @@ import javax.swing.table.DefaultTableModel;
  * @author Alex
  */
 public class ComisionesEmpleadoControlador implements ActionListener{
+    /**
+     * Vista de la comision del empleado
+     */
     ComisionesEmpleadoVista cEV;
-    
+    /**Ajusta la vista recibida  y agrega los valores iniciales de los elementos
+     * @param cEV ComisionesEmpleadoVista
+     * @param empleado EmpleadoModelo
+     */
     public ComisionesEmpleadoControlador(ComisionesEmpleadoVista cEV,EmpleadoModelo empleado) {
         this.cEV = cEV;
         cEV.setLocationRelativeTo(null);
@@ -28,23 +33,26 @@ public class ComisionesEmpleadoControlador implements ActionListener{
         
         cEV.getjTable1().setModel(table(empleado.getNotas()));
         cEV.getjTable1().setAutoCreateRowSorter(true);
-//        empleado.get
-//        cEV.getjTable1();
-//        cEV.getjTable1().getSelectedRow();
         
         cEV.setTitle("Comisiones por venta");
         cEV.setVisible(true);
     }
     
+    /**
+     *Selecciona que accion se realizo, en otras palabras, que fue lo que se
+     * presiono, para invocar una accion.
+     * @param aE ActionEvent
+     */
     @Override
     public void actionPerformed(ActionEvent aE){
         if(cEV.getBtnSalir() == aE.getSource()){
             cEV.dispose();
-        }else{
-            
         }
     }
-    
+    /**Recibe un ArrayList que descompone y acomoda en una DefaultTableModel
+     * @param notas ArrayList de tipo NotaModelo
+     * @return DefaultTableModel con los datos del arreglo
+     */
     private DefaultTableModel table(ArrayList<NotaModelo> notas){
         DefaultTableModel aux = (DefaultTableModel)cEV.getjTable1().getModel();
         for (int i = 0; i < notas.size(); i++) {
@@ -54,9 +62,7 @@ public class ComisionesEmpleadoControlador implements ActionListener{
             for (ProductoModelo producto : notas.get(i).getProductos()) {
                 sub += producto.getImporte();
             }
-//            double can = sub;
             double prix = sub*0.05;
-//            double sub = notas.get(i).getImporte();
             aux.addRow(new Object[]{id,dat,sub,prix});
         }
         return aux;

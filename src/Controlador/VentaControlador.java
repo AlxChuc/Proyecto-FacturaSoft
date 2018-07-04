@@ -5,17 +5,10 @@
  */
 package Controlador;
 
-import Modelo.EmpleadoModelo;
-import Modelo.NotaModelo;
-import Modelo.ProductoModelo;
+import Modelo.*;
 import Vista.NotaVista;
 import Vista.VentaVista;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -26,22 +19,36 @@ import javax.swing.table.DefaultTableModel;
  */
 public class VentaControlador implements ActionListener, MouseListener, KeyListener {
 
+    /**
+     *La vista de la venta
+     */
     VentaVista vV;
-    private javax.swing.table.DefaultTableModel mode;
-//    int test = 0;
+    /**
+     *La tabla del carrito de compras
+     */
+    private DefaultTableModel mode;
+    /**
+     *El empleado que hace la venta
+     */
     EmpleadoModelo empleadoM;
 
+    /**
+     *Inicializa las variables, ajusta la vista y 
+     * agrega los objetos a sus eventos
+     * @param vV VentaVista
+     * @param empleado EmpleadoModelo
+     */
     public VentaControlador(VentaVista vV, EmpleadoModelo empleado) {
         this.vV = vV;
         this.empleadoM = empleado;
-//        this.mode = (DefaultTableModel) vV.getTbProductos().getModel();
         this.mode = (DefaultTableModel) vV.getTbCarrito().getModel();
+        
         vV.getTbProductos().setAutoCreateRowSorter(true);
         vV.getTbCarrito().setAutoCreateRowSorter(true);
         vV.getTxtTotal().setText(null);
         vV.getBtnNota().setEnabled(false);
-
         vV.setLocationRelativeTo(null);
+        
         vV.getBtnNota().addActionListener(this);
         vV.getBtnCancelar().addActionListener(this);
         vV.getBtnRemover().addActionListener(this);
@@ -56,23 +63,27 @@ public class VentaControlador implements ActionListener, MouseListener, KeyListe
         vV.getTxtID().setText(empleado.getID());
     }
 
+    /**
+     * Selecciona que accion se realizo, en otras palabras, que fue lo que se
+     * presiono, para invocar una accion.
+     *
+     * @param ae ActionEvent
+     */
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (vV.getBtnNota() == ae.getSource()) {
-            NotaModelo nota = new NotaModelo(getProductos(mode),empleadoM);
-//            String total = vV.getTxtTotal().getText();
-            NotaControlador nC = new NotaControlador(new NotaVista(), nota);
-
+            ArrayList<ProductoModelo> p = getProductos(mode);
+//            NotaModelo nota = ;
+            new NotaControlador(new NotaVista(), new NotaModelo(p, empleadoM));
         } else {
             if (vV.getBtnCancelar() == ae.getSource()) {
                 vV.dispose();
             } else {
                 if (vV.getBtnRemover() == ae.getSource()) {
+
                     if (vV.getTbCarrito().getSelectedRow() > -1) {
-//            System.out.println(vV.getTbCarrito().getSelectedRow());
                         mode.removeRow(vV.getTbCarrito().getSelectedRow());
                         total();
-//            vV.getTbCarrito().setModel(mode);
                     } else {
                         JOptionPane.showMessageDialog(null, "Seleccione una fila");
                     }
@@ -81,10 +92,15 @@ public class VentaControlador implements ActionListener, MouseListener, KeyListe
         }
     }
 
+    /**
+     * Se activa cuando el mouse es cliqueado
+     *
+     * @param me
+     */
     @Override
     public void mouseClicked(MouseEvent me) {
         if (vV.getTbProductos() == me.getSource()) {
-
+//Solo era una prueba
             /*ProductoModelo n = new ProductoModelo("00", "a", 300, 20, 11);
             ProductoModelo n1 = new ProductoModelo("1", "b", 100, 30, 12);
             ProductoModelo n2 = new ProductoModelo("2", "c", 200, 10, 13);
@@ -93,22 +109,9 @@ public class VentaControlador implements ActionListener, MouseListener, KeyListe
             arr.add(n1);
             arr.add(n2);
             addProductos(arr);*/
-            int fila = vV.getTbProductos().getSelectedRow();
-//            int columna = vV.getTbProductos().getSelectedColumn();
-            String id = String.valueOf(vV.getTbProductos().getModel().getValueAt(fila, 0));
-            String nombre = String.valueOf(vV.getTbProductos().getModel().getValueAt(fila, 1));
-            String precio = String.valueOf(vV.getTbProductos().getModel().getValueAt(fila, 2));
-
-            Object[] newRow = {id, nombre, "1", precio, Double.parseDouble(precio)};
-            /*CONSEGUIR LOS DE CANTIDAD Y PRECIO DE LA TABLA DE PRODUCTOS*/
-//            mode.addRow(new String[]{String.valueOf(++test),"Descripcion","1","10",null});
-            mode.addRow(newRow);
-            vV.getTbCarrito().setModel(mode);
-            total();
-
+            pasarFila();
         } else {
             if (vV.getTbCarrito() == me.getSource()) {
-
                 precioXcantidad();
                 total();
             }
@@ -117,60 +120,98 @@ public class VentaControlador implements ActionListener, MouseListener, KeyListe
 
     /*El total hacerlo una función aparte y se lo paso al MOUSECLICKED y KEYRELEASED*/
     /**
+     * Se activa cuando el mouse es presionado
      *
-     * @param me
+     * @param me MouseEvent
      */
     @Override
     public void mousePressed(MouseEvent me) {
     }
 
+    /**
+     * Se activa cuando el mouse es liberado
+     *
+     * @param me MouseEvent
+     */
     @Override
     public void mouseReleased(MouseEvent me) {
     }
 
+    /**
+     * Se activa cuando el mouse entra en el objeto
+     *
+     * @param me MouseEvent
+     */
     @Override
     public void mouseEntered(MouseEvent me) {
     }
 
+    /**
+     * Se activa si el mouse se sale del objeto
+     *
+     * @param me MouseEvent
+     */
     @Override
     public void mouseExited(MouseEvent me) {
     }
 
     /*KeyReleased*/
+    /**
+     * Se activa cuando una tecla es escrita
+     *
+     * @param ke KeyEvent
+     */
     @Override
     public void keyTyped(KeyEvent ke) {
     }
 
+    /**
+     * Se activa cuando una tecla es presionada
+     *
+     * @param ke KeyEvent
+     */
     @Override
     public void keyPressed(KeyEvent ke) {
     }
 
+    /**
+     * Se activa cuando una tecla es soltada/liberada, verifica si el evento
+     * pertenece a los puestos en la función
+     *
+     * @param ke KeyEvent
+     */
     @Override
     public void keyReleased(KeyEvent ke) {
         if (vV.getTbCarrito() == ke.getSource()) {
-            int fila = vV.getTbCarrito().getSelectedRow();
-            int columna = vV.getTbCarrito().getSelectedColumn();
-            try {
+            ponerSubcosto();
+        }
+    }
 
-                int cantidad = Integer.parseInt((String) vV.getTbCarrito().getModel().getValueAt(fila, columna));
-                double precioUni = Double.parseDouble((String) vV.getTbCarrito().getModel().getValueAt(fila, columna + 1));
-                vV.getTbCarrito().getModel().setValueAt(cantidad * precioUni, fila, 4);
+    /**
+     * Agrega el subcosto del producto seleccionado
+     */
+    private void ponerSubcosto() {
+        int fila = vV.getTbCarrito().getSelectedRow();
+        int columna = vV.getTbCarrito().getSelectedColumn();
+        try {
 
-                total();
+            int cantidad = Integer.parseInt((String) vV.getTbCarrito().getModel().getValueAt(fila, columna));
+            double precioUni = Double.parseDouble((String) vV.getTbCarrito().getModel().getValueAt(fila, columna + 1));
+            vV.getTbCarrito().getModel().setValueAt(cantidad * precioUni, fila, 4);
 
-            } catch (NumberFormatException s) {
-                JOptionPane.showMessageDialog(null, "Dato inválido");
-                vV.getTbCarrito().editCellAt(fila, columna);
-            } catch (NullPointerException | ClassCastException ex) {
-            }
+            total();
 
+        } catch (NumberFormatException s) {
+            JOptionPane.showMessageDialog(null, "Dato inválido");
+            vV.getTbCarrito().editCellAt(fila, columna);
+        } catch (NullPointerException | ClassCastException ex) {
         }
     }
 
     /**
      * Obtiene el subtotal de cada producto en el carrito de compras y los suma
      * para obtener el costo total del carrito de compras (las compras que
-     * realiza el cliente)
+     * realiza el cliente) y lo pone en el textfield
      */
     private void total() {
         double totalCompra = 0;
@@ -232,9 +273,15 @@ public class VentaControlador implements ActionListener, MouseListener, KeyListe
 
     }
 
+    /**
+     * Crea un arreglo de ProductoModelo pasandole una DefaultTableModel
+     *
+     * @param model tipo DefaultTableModel
+     * @return ArrayList<ProdutoModelo> con la tabla pasada
+     */
     private ArrayList<ProductoModelo> getProductos(DefaultTableModel model) {
         ArrayList<ProductoModelo> arrayProd = new ArrayList<>();
-        
+
         for (int i = 0; i < model.getRowCount(); i++) {
 
             String id = String.valueOf(model.getValueAt(i, 0));
@@ -245,7 +292,21 @@ public class VentaControlador implements ActionListener, MouseListener, KeyListe
             ProductoModelo e = new ProductoModelo(id, des, can, prix, sub);
             arrayProd.add(e);
         }
-
         return arrayProd;
+    }
+
+    /**
+     * Al seleccionar una fila del primer jTable y se pasa al segundo
+     */
+    private void pasarFila() {
+        int fila = vV.getTbProductos().getSelectedRow();
+        String id = String.valueOf(vV.getTbProductos().getModel().getValueAt(fila, 0));
+        String nombre = String.valueOf(vV.getTbProductos().getModel().getValueAt(fila, 1));
+        String precio = String.valueOf(vV.getTbProductos().getModel().getValueAt(fila, 2));
+
+        Object[] newRow = {id, nombre, "1", precio, Double.parseDouble(precio)};
+        mode.addRow(newRow);
+        vV.getTbCarrito().setModel(mode);
+        total();
     }
 }

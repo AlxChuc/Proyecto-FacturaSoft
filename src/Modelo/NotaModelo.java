@@ -14,10 +14,25 @@ import java.util.Date;
  * @author Alex
  */
 public class NotaModelo {
+    /**
+     * El numero de la nota
+     */
     private  int numNota;
+    /**
+     * actualizacion del numero de la nota
+     */
     private static int staticValue;
+    /**
+     * arreglo de productos
+     */
     private ArrayList<ProductoModelo> productos;
+    /**
+     * la fecha (para poner la de hoy)
+     */
     private Date fecha;
+    /**
+     * empleado a quien pertenece la nota
+     */
     private EmpleadoModelo empleado;
     
     public NotaModelo(ArrayList<ProductoModelo> vendidos, EmpleadoModelo empleado) {
@@ -27,22 +42,41 @@ public class NotaModelo {
         this.fecha = Calendar.getInstance().getTime();
     }
 
+    /**
+     *obtiene el numero de la nota
+     * @return int, numero de la nota
+     */
     public int getNumNota() {
         return numNota;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<ProductoModelo> getProductos() {
         return productos;
     }
 
+    /**
+     *aumenta el valor de la variable estatica
+     */
     public void masUno(){
         staticValue++;
     }
 
+    /**
+     *obtiene el empleado de la nota
+     * @return EmpleadoModelo, quien hizo la nota
+     */
     public EmpleadoModelo getEmpleado() {
         return empleado;
     }
 
+    /**
+     *obtiene la fecha de hoy
+     * @return Date, la fecha de hoy
+     */
     public Date getFecha() {
         return fecha;
     }
