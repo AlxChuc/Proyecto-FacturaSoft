@@ -1,0 +1,2 @@
+0002/Laptop Dell Azul/5/13000.0
+0003/Ventilador/11/1500.0
