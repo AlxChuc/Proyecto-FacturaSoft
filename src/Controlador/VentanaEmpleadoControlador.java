@@ -20,6 +20,11 @@ public class VentanaEmpleadoControlador implements ActionListener {
      */
     private EmpleadoModelo eM;
 
+    /**
+     *Inicializa las variables, acomoda y ajusta la ventana
+     * @param vEV tipo VentanaEmpleadoVista
+     * @param empleado tipo EmpleadoModelo
+     */
     public VentanaEmpleadoControlador(VentanaEmpleadoVista vEV, EmpleadoModelo empleado) {
         this.vEV = vEV;
         this.eM = empleado;
@@ -36,8 +41,8 @@ public class VentanaEmpleadoControlador implements ActionListener {
     }
 
     /**
-     * Selecciona qué acctión se realizó, en otras palabras, qué fue lo que se
-     * presionó, para invocar una acción.
+     * Selecciona que acción se realizo, en otras palabras, que fue lo que se
+     * presiono, para invocar una accion.
      *
      * @param aE ActionEvent
      */

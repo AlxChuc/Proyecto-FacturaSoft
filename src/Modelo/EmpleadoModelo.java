@@ -21,7 +21,9 @@ public class EmpleadoModelo extends Usuario {
      * Salario del empleado.
      */
     public double salario;
-    
+    /*
+    *Arreglo de todas la notas del empleado
+    */
     private ArrayList<NotaModelo> notas;
     
     public EmpleadoModelo(String ID, String nombre, String contrasenia, int edad) {
